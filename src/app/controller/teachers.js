@@ -1,17 +1,32 @@
 const { age } = require('../../lib/util')
 const { date } = require('../../lib/util')
+const teacher = require("../models/teacher")
 
 module.exports = {
     index(req, res) {
-        return res.render("teachers/index")
+        teacher.all(function(teachers) {
+            const teachersformated = []
+            for (i in teachers) {
+                const teacher = {
+                    ...teachers[i],
+                    areas: teachers[i].areas.split(",")
+                }
+                teachersformated.push(teacher)
+            }
+            return res.render("teachers/index", { teachers: teachersformated })
+        })
     },
     post(req, res) {
+        const { id } = req.body
         const keys = Object.keys(req.body)
         for (key of keys) {
             if (req.body[key] == "") {
                 return res.send("por favor validar todos os campos")
             }
         }
+        teacher.create(req.body, function() {
+            return res.redirect(`/teachers/${id}`)
+        })
         return
     },
     show(req, res) {
