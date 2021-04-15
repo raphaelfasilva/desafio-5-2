@@ -22,10 +22,10 @@ module.exports = {
         const { id } = req.params
         student.find(id, function(student) {
             if (!student) return res.send("instrutor não encontrado")
-            student.birth = date(student.birth).format
+            student.birth_date = date(student.birth).format
+            student.create_at = date(student.birth).format
             return res.render("students/show", { student })
         })
-        return
     },
     edit(req, res) {
         const { id } = req.params

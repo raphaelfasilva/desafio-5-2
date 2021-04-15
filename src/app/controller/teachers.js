@@ -27,15 +27,29 @@ module.exports = {
         teacher.create(req.body, function() {
             return res.redirect(`/teachers/${id}`)
         })
-        return
     },
     show(req, res) {
         const { id } = req.params
-        return
+        teacher.find(id, function(teacher) {
+            if (!teacher) return res.send("Professor não encontrado")
+            teacher.age = age(teacher.birth_date)
+            teacher.created_at = date(teacher.create_at).format
+            teacher.degree = teacher.education_level
+            teacher.typeofclass = teacher.class_type
+            teacher.areas = teacher.areas.split(',')
+            console.log(teacher)
+            return res.render("teachers/show", { teacher })
+        })
     },
     edit(req, res) {
         const { id } = req.params
-        return
+        teacher.find(id, function(teacher) {
+            if (!teacher) return res.send("instrutor não encontrado")
+            teacher.birth = date(teacher.birth_date).iso
+            teacher.degree = teacher.education_level
+            teacher.typeofclass = teacher.class_type
+            return res.render("teachers/edit", { teacher })
+        })
     },
     put(req, res) {
         const { id } = req.body

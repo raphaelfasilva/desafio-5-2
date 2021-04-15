@@ -38,7 +38,7 @@ module.exports = {
         })
     },
     find(id, callback) {
-        db.query('select * from students where id = $1', [id], function(err, results) {
+        db.query('select * from teachers where id = $1', [id], function(err, results) {
             if (err) throw "data base error"
             callback(results.rows[0])
         })
