@@ -29,7 +29,7 @@ module.exports = {
             data.hours
         ]
         db.query(query, values, function(err, results) {
-            if (err) throw err
+            if (err) throw "data base error"
             callback(results.rows[0])
         })
     },

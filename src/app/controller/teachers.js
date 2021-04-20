@@ -17,15 +17,14 @@ module.exports = {
         })
     },
     post(req, res) {
-        const { id } = req.body
         const keys = Object.keys(req.body)
         for (key of keys) {
             if (req.body[key] == "") {
                 return res.send("por favor validar todos os campos")
             }
         }
-        teacher.create(req.body, function() {
-            return res.redirect(`/teachers/${id}`)
+        teacher.create(req.body, function(teacher) {
+            return res.redirect(`/teachers/${teacher.id}`)
         })
     },
     show(req, res) {
@@ -37,7 +36,6 @@ module.exports = {
             teacher.degree = teacher.education_level
             teacher.typeofclass = teacher.class_type
             teacher.areas = teacher.areas.split(',')
-            console.log(teacher)
             return res.render("teachers/show", { teacher })
         })
     },
@@ -53,12 +51,14 @@ module.exports = {
     },
     put(req, res) {
         const { id } = req.body
-        let index = 0
-
-        return
+        teacher.update(req.body, function() {
+            return res.redirect(`/teachers/${id}`)
+        })
     },
     delete(req, res) {
         const { id } = req.body
-        return
+        teacher.delete(id, function() {
+            return res.redirect("/teachers")
+        })
     }
 }

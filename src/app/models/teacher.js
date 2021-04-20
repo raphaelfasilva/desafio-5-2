@@ -4,7 +4,7 @@ module.exports = {
     all(callback) {
         db.query(`SELECT * from teachers  
         order by name`, function(err, results) {
-            if (err) throw err
+            if (err) throw "data base error"
             callback(results.rows)
         })
     },
@@ -33,7 +33,7 @@ module.exports = {
             date(Date.now()).iso
         ]
         db.query(query, values, function(err, results) {
-            if (err) throw err
+            if (err) throw "data base error"
             callback(results.rows[0])
         })
     },
@@ -45,24 +45,27 @@ module.exports = {
     },
     update(data, callback) {
         const query = `
-           update students SET 
+           update teachers SET 
            avatar_url=($1),
            name=($2),
-           birth=($3),
-           email=($4),
-           schoolyear=($5),
-           hours=($6)
-           where id= $7
+           birth_date=($3),
+           education_level=($4),
+           areas=($5),
+           class_type=($6),
+           subjects_taught=($7)
+           where id=$8
         `
         const values = [
             data.avatar_url,
             data.name,
-            date(data.birth).iso,
-            data.email,
-            data.schoolyear,
-            data.hours,
+            data.birth,
+            data.degree,
+            data.areas,
+            data.typeofclass,
+            data.subjects_taught,
             data.id
         ]
+        console.log(values)
         db.query(query, values, function(err, res) {
             if (err) throw "data base error"
             callback()
@@ -70,7 +73,7 @@ module.exports = {
 
     },
     delete(id, callback) {
-        db.query(`DELETE FROM students where id = $1`, [id], function() {
+        db.query(`DELETE FROM teachers where id = $1`, [id], function() {
             callback()
         })
     }
